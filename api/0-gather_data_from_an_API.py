@@ -9,9 +9,9 @@ import sys
 if __name__ == '__main__':
     """IF SCRIPT IS NOT RUN AS MODULE"""
     employee_id = sys.argv[1]
-    user_url = "https://jsonplaceholder.typicode.com/users/{}" \
+    user_url = "https://jsonplaceholder.typicode.com/users/{employee_id}" \
         .format(employee_id)
-    todos_url = "https://jsonplaceholder.typicode.com/users/{}/todos/" \
+    todos_url = "https://jsonplaceholder.typicode.com/users/{employee_id}/todos/" \
         .format(employee_id)
 
     user_info = requests.get(user_url).json()
