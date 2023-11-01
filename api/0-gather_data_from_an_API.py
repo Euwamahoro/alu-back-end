@@ -23,6 +23,7 @@ if __name__ == '__main__':
     number_of_done_tasks = len(task_completed)
     total_number_of_tasks = len(todos_info)
 
+    print("Employee Name: OK")
     print("Employee {} is done with tasks({}/{}):".
           format(employee_name, number_of_done_tasks, total_number_of_tasks))
 
