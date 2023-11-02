@@ -24,4 +24,4 @@ if __name__ == "__main__":
     with open(file_name, 'w') as csv_file:
         writer = csv.writer(csv_file, delimiter=',', quoting=csv.QUOTE_ALL)
         for todo in todos:
-writer.writerow([argv[1], name, todo['completed'], todo['title']])
+            writer.writerow([argv[1], name, todo['completed'], todo['title']])
