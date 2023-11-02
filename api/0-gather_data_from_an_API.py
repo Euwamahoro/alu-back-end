@@ -1,21 +1,28 @@
 #!/usr/bin/python3
-"""
-    Uses the fake API to get an employer
-"""
-import requests
-from sys import argv
+'''get info from api'''
 
 if __name__ == "__main__":
-    id_em = argv[1]
-    url_employ = "https://jsonplaceholder.typicode.com/users/{}".format(id_em)
-    url_todos = url_employ + "/todos"
-    r_employ = requests.get(url_employ).json()
-    r_todos = requests.get(url_todos).json()
-    name = r_employ.get("name")
-    total_num_task = r_todos
-    done_task = [task for task in r_todos if task.get("completed")]
-    output = "Employee {} is done with tasks({}/{}):".format(
-                name, len(done_task), len(total_num_task))
-    for task in done_task:
-        output += "\n\t " + task.get("title")
-    print(output)
+    import requests
+    from sys import argv
+
+    url = "https://jsonplaceholder.typicode.com/"
+    userId = argv[1]
+
+    user = requests.get(url + "users/{}".format(userId)).json()
+    todos = requests.get(url + "todos?userId={}".format(userId)).json()
+
+    name = user.get("name")
+    ct = 0
+    t = len(todos)
+    tasks = ""
+
+    for todo in todos:
+        if todo.get("completed"):
+            ct += 1
+            title = todo.get("title")
+            tasks += "\t {}\n".format(title)
+
+            line = "Employee {} is done with tasks({}/{})".format(name, ct, t)
+
+    print(line)
+    print(tasks, end="")
