@@ -4,6 +4,8 @@
     Given employee ID, returns information
     about his/her todo list progress.
 """
+import urllib.request
+import json
 import requests
 import sys
 
