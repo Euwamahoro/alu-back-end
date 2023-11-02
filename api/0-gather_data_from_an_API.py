@@ -1,27 +1,33 @@
 #!/usr/bin/python3
+"""
+place holder
+"""
 
-import requests
 
-def get_todo_list_progress(employee_id):
-    # Make a GET request to the API endpoint
-    response = requests.get(f"https://jsonplaceholder.typicode.com/todos?userId={employee_id}")
+if __name__ == "__main__":
 
-    # Check if the request was successful (status code 200)
-    if response.status_code == 200:
-        # Get the list of TODO items from the response
-        todo_list = response.json()
+    import requests
+    from sys import argv
+    if len(argv) < 2:
+        exit()
+    todos = requests.get(
+        "https://jsonplaceholder.typicode.com/todos?userId={}&completed=true"
+        .format(argv[1]))
+    name = requests.get(
+        "https://jsonplaceholder.typicode.com/users?id={}"
+        .format(argv[1]))
+    name = name.json()
+    name = name[0]["name"]
+    todo = requests.get(
+        "https://jsonplaceholder.typicode.com/todos?userId={}".format(argv[1]))
+    todo = todo.json()
+    todo = len(todo)
+    todos = todos.json()
+    todo_list = []
 
-        # Count the number of completed and incomplete TODO items
-        completed_count = sum(1 for todo in todo_list if todo['completed'])
-        incomplete_count = len(todo_list) - completed_count
-
-        # Print the TODO list progress
-        print(f"Employee ID: {employee_id}")
-        print(f"Completed TODO items: {completed_count}")
-        print(f"Incomplete TODO items: {incomplete_count}")
-    else:
-        print(f"Failed to fetch TODO list for employee ID: {employee_id}")
-
-# Example usage
-employee_id = 1
-get_todo_list_progress(employee_id)
+    for x in todos:
+        todo_list.append("\t {}".format(x["title"]))
+    print("Employee {} is done with tasks({}/{}):"
+          .format(name, len(todos), todo))
+    for y in todo_list:
+        print(y)
