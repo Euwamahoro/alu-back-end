@@ -1,29 +1,37 @@
 #!/usr/bin/python3
-"""Module"""
+"""
+Script that uses REST API that returns the
+information about the status of employee's TODO list given employee ID.
+Usage: 0-gather_data_from_an_API.py <employee_id>
+"""
 
 import requests
 import sys
 
-"""Module"""
 
-if __name__ == '__main__':
-    """IF SCRIPT IS NOT RUN AS MODULE"""
-    employee_id = sys.argv[1]
-    user_url = "https://jsonplaceholder.typicode.com/users/{}" \
-        .format(employee_id)
-    todos_url = "https://jsonplaceholder.typicode.com/users/{}/todos/" \
-        .format(employee_id)
+if __name__ == "__main__":
+    if len(sys.argv) != 2:
+        sys.exit("Please provide an employee ID")
 
-    user_info = requests.get(user_url).json()
-    todos_info = requests.get(todos_url).json()
+    emp_id = sys.argv[1]
+    if not emp_id.isdigit():
+        sys.exit("Employee ID must be an integer.")
 
-    employee_name = user_info["name"]
-    task_completed = list(filter(lambda obj:
-                                 (obj["completed"] is True), todos_info))
-    number_of_done_tasks = len(task_completed)
-    total_number_of_tasks = len(todos_info)
+    response = requests.get("https://jsonplaceholder.typicode.com/todos",
+                            params={"userId": emp_id})
+    employee = requests.get("https://jsonplaceholder.typicode.com/users/{}"
+                            .format(emp_id))
+    emp_name = employee.json().get('name')
 
-    print("Employee {} is done with tasks({}/{}):".
-          format(employee_name, number_of_done_tasks, total_number_of_tasks))
+    tasks = response.json()
+    completed = 0
+    for t in tasks:
+        if t.get('completed'):
+            completed += 1
 
-    [print("\t " + task["title"]) for task in task_completed]
+    print("Employee {} is done with tasks({}/{}):"
+          .format(emp_name, completed, len(tasks)))
+
+    for t in tasks:
+        if t.get('completed'):
+            print("\t {}".format(t.get('title')))
